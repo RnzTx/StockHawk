@@ -84,8 +84,7 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
     return super.getItemCount();
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder
-      implements ItemTouchHelperViewHolder, View.OnClickListener{
+  public static class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
     public final TextView symbol;
     public final TextView bidPrice;
     public final TextView change;
@@ -107,9 +106,13 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
       itemView.setBackgroundColor(0);
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
+	  /**
+       * As RecyclerViewItemClickListener is provided
+       * so removing this listener
+       */
+//    @Override
+//    public void onClick(View v) {
+//
+//    }
   }
 }

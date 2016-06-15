@@ -111,7 +111,7 @@ public class StockTaskService extends GcmTaskService{
     if (urlStringBuilder != null){
       urlString = urlStringBuilder.toString();
 
-      Log.e(LOG_TAG,"New Url: "+urlString);
+      Log.d(LOG_TAG,"New Url: "+urlString);
 
       try{
         getResponse = fetchData(urlString);

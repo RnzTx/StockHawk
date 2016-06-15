@@ -86,8 +86,6 @@ public class Utils {
 		String change = jsonObject.getString("Change");
 		if (change.equals("null"))
 			return null;
-		else
-		Log.e(LOG_TAG,"change is not null"+change);
 
       builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol"));
       builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString("Bid")));
