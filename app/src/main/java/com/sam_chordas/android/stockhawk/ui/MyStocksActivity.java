@@ -90,7 +90,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
               @Override public void onItemClick(View v, int position) {
                 Bundle arguments = new Bundle();
                 String stock_name = ((TextView)v.findViewById(R.id.stock_symbol)).getText().toString();
-                arguments.putString(Constants.KEY_STOCK_NAME,stock_name);
+                arguments.putString(Constants.KEY_STOCK_SYMBOL,stock_name);
                 Intent intent = new Intent(mContext,GraphActivity.class);
                 intent.putExtras(arguments);
                 startActivity(intent);
