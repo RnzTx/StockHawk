@@ -3,7 +3,6 @@ package com.sam_chordas.android.stockhawk.ui.graph;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.rest.Constants;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.stock_history.StockDataTask;
-import com.sam_chordas.android.stockhawk.stock_history.StockHistoryHandler;
 
 import java.util.ArrayList;
 
@@ -25,7 +23,8 @@ import java.util.ArrayList;
  */
 public class GraphFragment extends Fragment {
 	private static final String LOG_TAG = GraphFragment.class.getSimpleName();
-
+	LineChart mLineChart;
+	LineDataSet mLineDataSet = new LineDataSet(new ArrayList<Entry>(),"Values");
 	public GraphFragment() {
 		// Required empty public constructor
 	}
@@ -37,11 +36,21 @@ public class GraphFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 		String stock_name = getActivity().getIntent().getExtras().getString(Constants.KEY_STOCK_SYMBOL);
-		LineChart lineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
+		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
+		getActivity().setTitle(stock_name);
 
+		// Graph
+		// empty X-axis labels for graph
+		ArrayList<String> xVals = new ArrayList<>();
+
+		// create dummy data from label and dataset
+		LineData lineData = new LineData(xVals,mLineDataSet);
+		mLineChart.setData(lineData);
+		mLineChart.setDescription(Utils.getStartDate()+" To "+Utils.getEndDate());
+		mLineDataSet.setLabel("Stock Price");
 		// get Url
-		String url = Utils.buldStockHistoryDataUrl(stock_name);
-		StockDataTask stockDataTask = new StockDataTask(url,lineChart);
+		String url = Utils.buildStockHistoryDataUrl(stock_name);
+		StockDataTask stockDataTask = new StockDataTask(url,mLineChart,lineData,mLineDataSet);
 		stockDataTask.execute();
 		return rootView;
 	}

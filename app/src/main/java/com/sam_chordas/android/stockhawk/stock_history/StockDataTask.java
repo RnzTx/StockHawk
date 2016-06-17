@@ -7,9 +7,6 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +17,21 @@ import java.util.List;
 public class StockDataTask extends AsyncTask<Void,Void,List<Quote>> {
 	private static final String LOG_TAG = StockDataTask.class.getSimpleName();
 	String url;
-	LineChart lineChart;
+	LineChart mLineChart;
+	LineData mLineData;
+	LineDataSet mLineDataSet;
 
-	public StockDataTask(String url, LineChart lineChart) {
+	public StockDataTask(String url, LineChart mLineChart, LineData mLineData, LineDataSet mLineDataSet) {
 		this.url = url;
-		this.lineChart = lineChart;
+		this.mLineChart = mLineChart;
+		this.mLineData = mLineData;
+		this.mLineDataSet = mLineDataSet;
 	}
 
 	@Override
 	protected List<Quote> doInBackground(Void... params) {
 		try{
+			// get Stock Data
 			StockHistoryHandler dataHandler = new StockHistoryHandler();
 			List<Quote> stockQuotes = dataHandler.getStockQuotes(this.url);
 			return stockQuotes;
@@ -43,29 +45,20 @@ public class StockDataTask extends AsyncTask<Void,Void,List<Quote>> {
 	protected void onPostExecute(List<Quote> quotes) {
 		super.onPostExecute(quotes);
 		if (quotes!=null){
-			// create entries
-			ArrayList<Entry> dummyEntries = new ArrayList<>();
-			dummyEntries.add(new Entry(2f,0));
-			dummyEntries.add(new Entry(3f,1));
-			dummyEntries.add(new Entry(4f,2));
-			dummyEntries.add(new Entry(5f,3));
-			dummyEntries.add(new Entry(9f,4));
-			dummyEntries.add(new Entry(4.2f,5));
-
-			// create dataset from entries
-			LineDataSet lineDataSet = new LineDataSet(dummyEntries,"Stock Values");
-
-			// X-axis labels for graph
-			ArrayList<String> labels = new ArrayList<>();
-			labels.add("one"); labels.add("two"); labels.add("three"); labels.add("four"); labels.add("five");
-			labels.add("six");
-
-			// create data from label and dataset
-			LineData lineData = new LineData(labels,lineDataSet);
-
-			// Add data to LineChart
-			this.lineChart.setData(lineData);
-			Log.e(LOG_TAG,"Data Size: "+quotes.size());
+			ArrayList<String> xVaList = new ArrayList<>();
+			for (int i=0;i<quotes.size();i++){
+				Quote quote = quotes.get(i);
+				mLineDataSet.addEntry(
+						// add Stock entry to yValues
+						new Entry(Float.valueOf(quote.getClose()),i)
+				);
+				// add date to xValues
+				xVaList.add(quote.getDate());
+			}
+			mLineData.setXVals(xVaList); // Update xValues - date
+			mLineData.notifyDataChanged(); // let Data know its DataSet changed
+			mLineChart.notifyDataSetChanged(); // let chart know its Data changed
+			mLineChart.invalidate();// refresh chart
 		}
 	}
 }
