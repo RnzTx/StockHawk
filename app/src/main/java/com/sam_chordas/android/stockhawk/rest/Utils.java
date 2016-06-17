@@ -4,6 +4,8 @@ import android.content.ContentProviderOperation;
 import android.util.Log;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,5 +105,20 @@ public class Utils {
       e.printStackTrace();
     }
     return builder.build();
+  }
+  public static String buldStockHistoryDataUrl(String stock_symbol){
+
+    try{
+      String BASE_URL = "http://query.yahooapis.com/v1/public/yql?q=";
+      String TABLE_QUERY = "select * from yahoo.finance.historicaldata where symbol = \""+stock_symbol+"\" and startDate = \"2015-06-16\" and endDate = \"2016-06-16\"";
+      String FINAL_URL = BASE_URL
+                        + URLEncoder.encode(TABLE_QUERY, "UTF-8")
+                        +"&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables."
+                        + "org%2Falltableswithkeys&callback=";
+      return FINAL_URL;
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    return null;
   }
 }
