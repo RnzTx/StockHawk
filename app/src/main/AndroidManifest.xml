@@ -43,7 +43,7 @@
         <provider
             android:name=".data.generated.QuoteProvider"
             android:authorities="com.sam_chordas.android.stockhawk.data.QuoteProvider"
-            android:exported="false"/>
+            android:exported="true"/>
 
         <activity android:name=".ui.graph.GraphActivity">
         </activity>
@@ -53,13 +53,20 @@
                   android:label="@string/title_widget_sample">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <!--Register Broadcast-->
+                <action android:name="com.example.sam_chordas.stockhawk.STOCK_DATA_UPDATE"/>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info"
                 />
         </receiver>
-
+        <!--RemoteViews of Widget list-->
+        <service android:name=".widgets.StockWidgetRemoteViewService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS">
+        </service>
     </application>
 
 </manifest>

@@ -3,12 +3,17 @@ package com.sam_chordas.android.stockhawk.widgets;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import com.sam_chordas.android.stockhawk.R;
-import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
+import com.sam_chordas.android.stockhawk.rest.Constants;
+import com.sam_chordas.android.stockhawk.service.StockTaskService;
+import com.sam_chordas.android.stockhawk.ui.graph.GraphActivity;
+import com.sam_chordas.android.stockhawk.ui.graph.GraphFragment;
 
 /**
  * Created by rnztx on 18/6/16.
@@ -16,28 +21,38 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 public class StockWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-
-		int widgetIcon = R.drawable.ic_sample;
-		String stockDescription = "some Description";
-		String stockName = "FIT";
-
 		// update all StockWidgets
 		for (int widgetId: appWidgetIds){
-			int layoutId = R.layout.widget_small_sample;
-			RemoteViews widgetView = new RemoteViews(context.getPackageName(),layoutId);
+			Intent intent = new Intent(context,StockWidgetRemoteViewService.class);
+			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,widgetId);
 
-			// add Data to Remote View
-			widgetView.setImageViewResource(R.id.widget_small_icon,widgetIcon);
-			widgetView.setTextViewText(R.id.widget_small_stock_name,stockName);
+			// create Widget
+			RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget_layout);
+			views.setRemoteAdapter(widgetId,R.id.widget_list_view,intent);
 
-			// Create Widget to launch StockHawk
-			Intent intent = new Intent(context, MyStocksActivity.class);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
-			widgetView.setOnClickPendingIntent(R.id.widget_small,pendingIntent);
+			// Open Graph on List Item click
+			Intent intentStockGraph = new Intent(context, GraphActivity.class);
+			PendingIntent pendingIntent = TaskStackBuilder.create(context)
+					.addNextIntentWithParentStack(intentStockGraph)
+					.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+			views.setPendingIntentTemplate(R.id.widget_list_view,pendingIntent);
 
-			// Tell AppWidgetManager to perform Update!
-			appWidgetManager.updateAppWidget(widgetId,widgetView);
+			// Update Widget on HomeScreen
+			appWidgetManager.updateAppWidget(widgetId,views);
+		}
+
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
+	}
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	// Receive Broadcast About Stock Data Update
+		super.onReceive(context, intent);
+		if (intent.getAction().equals(Constants.ACTION_STOCK_UPDATE)){
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context,getClass()));
+			// update All Widgets
+			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,R.id.widget_list_view);
 		}
 	}
 }
