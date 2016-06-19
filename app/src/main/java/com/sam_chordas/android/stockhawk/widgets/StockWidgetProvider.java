@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.sam_chordas.android.stockhawk.R;
@@ -19,6 +20,7 @@ import com.sam_chordas.android.stockhawk.ui.graph.GraphFragment;
  * Created by rnztx on 18/6/16.
  */
 public class StockWidgetProvider extends AppWidgetProvider {
+	private static final String LOG_TAG = StockWidgetProvider.class.getSimpleName();
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		// update all StockWidgets
@@ -28,7 +30,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
 
 			// create Widget
 			RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget_layout);
-			views.setRemoteAdapter(widgetId,R.id.widget_list_view,intent);
+			views.setRemoteAdapter(R.id.widget_list_view,intent);
 
 			// Open Graph on List Item click
 			Intent intentStockGraph = new Intent(context, GraphActivity.class);
@@ -47,6 +49,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	// Receive Broadcast About Stock Data Update
+		Log.d(LOG_TAG,"Broadcast Received updating widgets");
 		super.onReceive(context, intent);
 		if (intent.getAction().equals(Constants.ACTION_STOCK_UPDATE)){
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

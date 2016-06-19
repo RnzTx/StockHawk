@@ -29,7 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.graph.GraphActivity"
+            android:parentActivityName=".ui.MyStocksActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MyStocksActivity"
+                />
 
+        </activity>
         <service
             android:name=".service.StockTaskService"
             android:exported="true"
@@ -44,9 +52,6 @@
             android:name=".data.generated.QuoteProvider"
             android:authorities="com.sam_chordas.android.stockhawk.data.QuoteProvider"
             android:exported="true"/>
-
-        <activity android:name=".ui.graph.GraphActivity">
-        </activity>
 
         <!--Widget Sample-->
         <receiver android:name=".widgets.StockWidgetProvider"

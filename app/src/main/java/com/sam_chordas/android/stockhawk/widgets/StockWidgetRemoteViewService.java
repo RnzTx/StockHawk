@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -11,12 +12,13 @@ import android.widget.RemoteViewsService;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.rest.Constants;
 
 /**
  * Created by rnztx on 19/6/16.
  */
 public class StockWidgetRemoteViewService extends RemoteViewsService {
-	private static final String LOG_TAG = StockWidgetRemoteViewService.class.getName();
+	private static final String LOG_TAG = StockWidgetRemoteViewService.class.getSimpleName();
 	public StockWidgetRemoteViewService() {
 	}
 
@@ -47,7 +49,7 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 
 		@Override
 		public void onDataSetChanged() {
-			Log.e(LOG_TAG,"onDataSetChanged updating Cursor");
+			// update Cursor when dataset is changed eg. stock added / removed
 			// refer http://stackoverflow.com/a/16076336
 			if (mCursor!=null)
 				mCursor.close();
@@ -74,14 +76,14 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 		public RemoteViews getViewAt(int position) {
 			mCursor.moveToPosition(position);
 			int priceChangeColorId;
-			Log.e(LOG_TAG,"Cursor Count: "+getCount());
-			// get Stock Symbol information
+
+			// get Stock Quote information
 			String stockSymbol = mCursor.getString(mCursor.getColumnIndex("symbol"));
 			String stockBidPrice = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
 			String stockPriceChange = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.CHANGE));
 			int isUp = mCursor.getInt(mCursor.getColumnIndex(QuoteColumns.ISUP));
 
-			// create Item in Widget ListView
+			// create List Item for Widget ListView
 			RemoteViews listItemRemoteView = new RemoteViews(mContext.getPackageName(), R.layout.list_item_quote);
 			listItemRemoteView.setTextViewText(R.id.stock_symbol,stockSymbol);
 			listItemRemoteView.setTextViewText(R.id.bid_price,stockBidPrice);
@@ -92,8 +94,15 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 				priceChangeColorId = R.drawable.percent_change_pill_green;
 			else
 				priceChangeColorId = R.drawable.percent_change_pill_red;
-
 			listItemRemoteView.setInt(R.id.change,"setBackgroundResource",priceChangeColorId);
+
+			// set Onclick Item Intent
+			Intent onClickItemIntent = new Intent();
+			Bundle arguments = new Bundle();
+			arguments.putString(Constants.KEY_STOCK_SYMBOL,stockSymbol);
+			onClickItemIntent.putExtras(arguments);
+
+			listItemRemoteView.setOnClickFillInIntent(R.id.list_item_stock_quote,onClickItemIntent);
 			return listItemRemoteView;
 		}
 
