@@ -14,7 +14,7 @@
       style="@style/StockSymbolTextStyle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:gravity="left|center_vertical"
+      android:gravity="end|center_vertical"
       tools:text="GOOG"
       android:textColor="@android:color/darker_gray"
       />
@@ -22,14 +22,13 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:gravity="right"
+      android:gravity="end"
       >
     <TextView
         android:id="@+id/bid_price"
         style="@style/BidPriceTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="10sp"
         tools:text="1000.00"
         android:textColor="@android:color/darker_gray"
         />
@@ -39,8 +38,6 @@
         style="@style/PercentChangeTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
         tools:text="100%"
         />
   </LinearLayout>

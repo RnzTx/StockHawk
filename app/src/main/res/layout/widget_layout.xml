@@ -11,10 +11,11 @@
         android:textSize="@dimen/text_size_widget_title"
         android:background="@color/material_blue_500"
         android:textColor="@android:color/background_light"
-        android:gravity="center_vertical"
+        android:gravity="start|center_vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingStart="@dimen/activity_horizontal_margin"
-
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         />
     <ListView
         android:id="@+id/widget_list_view"
