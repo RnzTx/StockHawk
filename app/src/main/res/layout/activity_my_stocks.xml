@@ -24,6 +24,7 @@
       fab:fab_colorRipple="@color/ripple"
       fab:fab_shadow="true"
       fab:fab_type="normal"
+      android:contentDescription="@string/desc_button_add_stock"
       fab:layout_anchor="recycler_view"
       fab:layout_anchorGravity="bottom | end"
       />

@@ -19,9 +19,18 @@ import org.json.JSONObject;
  */
 public class Utils {
 
+    public static final String QUERY = "query";
+    public static final String COUNT = "count";
+    public static final String RESULTS = "results";
+    public static final String QUOTE = "quote";
+    public static final String CHANGE = "Change";
+    public static final String SYMBOL = "symbol";
+    public static final String BID = "Bid";
+    public static final String CHANGEIN_PERCENT = "ChangeinPercent";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
     private static String LOG_TAG = Utils.class.getSimpleName();
-
     public static boolean showPercent = true;
+
 
     public static ArrayList quoteJsonToContentVals(String JSON){
         ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
@@ -30,22 +39,22 @@ public class Utils {
         try{
             jsonObject = new JSONObject(JSON);
             if (jsonObject != null && jsonObject.length() != 0){
-                jsonObject = jsonObject.getJSONObject("query");
-                int count = Integer.parseInt(jsonObject.getString("count"));
+                jsonObject = jsonObject.getJSONObject(QUERY);
+                int count = Integer.parseInt(jsonObject.getString(COUNT));
                 if (count == 1){
-                    jsonObject = jsonObject.getJSONObject("results")
-                            .getJSONObject("quote");
-			/**
-			 * If Stock name doesn't exists !
-			 * it will return null
-			 */
-                        ContentProviderOperation operation = buildBatchOperation(jsonObject);
-                        if (operation!=null)
-				batchOperations.add(operation);
-			else
-				Log.e(LOG_TAG,"Stock doesn't exists");
+                    jsonObject = jsonObject.getJSONObject(RESULTS)
+                            .getJSONObject(QUOTE);
+                    /**
+                     * If Stock name doesn't exists !
+                     * it will return null
+                     */
+                    ContentProviderOperation operation = buildBatchOperation(jsonObject);
+                    if (operation!=null)
+                        batchOperations.add(operation);
+                    else
+                        Log.e(LOG_TAG,"Stock doesn't exists");
                 } else{
-                    resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
+                    resultsArray = jsonObject.getJSONObject(RESULTS).getJSONArray(QUOTE);
 
                     if (resultsArray != null && resultsArray.length() != 0){
                         for (int i = 0; i < resultsArray.length(); i++){
@@ -88,14 +97,14 @@ public class Utils {
                 QuoteProvider.Quotes.CONTENT_URI);
         try {
 
-		String change = jsonObject.getString("Change");
+		String change = jsonObject.getString(CHANGE);
 		if (change.equals("null"))
 			return null;
 
-            builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol"));
-            builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString("Bid")));
+            builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString(SYMBOL));
+            builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString(BID)));
             builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
-                    jsonObject.getString("ChangeinPercent"), true));
+                    jsonObject.getString(CHANGEIN_PERCENT), true));
             builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
             builder.withValue(QuoteColumns.ISCURRENT, 1);
             if (change.charAt(0) == '-'){
@@ -129,14 +138,14 @@ public class Utils {
 
     public static String getEndDate(){
     //Today's date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         Calendar calendar = Calendar.getInstance();
         return dateFormat.format(calendar.getTime());
     }
 
     public static String getStartDate(){
     //Previous Month Date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         Calendar today = Calendar.getInstance();
         today.add(Calendar.MONTH,-1);
         return dateFormat.format(today.getTime());

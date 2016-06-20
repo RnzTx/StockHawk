@@ -10,7 +10,10 @@ public class Constants {
 	public static final String KEY_TAG = "tag";
 	public static final String VAL_TAG_ADD = "add";
 	public static final String VAL_TAG_HISTORY = "history";
+	public static final String VAL_TAG_INIT = "init";
+	public static final String VAL_TAG_PEREODIC = "periodic";
 	public static final String STOCK_TABLE_CURRENT = "yahoo.finance.quotes";
 	public static final String STOCK_TABLE_HISTORY = "yahoo.finance.historicaldata";
 	public static final String ACTION_STOCK_UPDATE = "com.example.sam_chordas.stockhawk.STOCK_DATA_UPDATE";
+
 }

@@ -64,7 +64,7 @@ public class StockTaskService extends GcmTaskService{
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        if (params.getTag().equals("init") || params.getTag().equals("periodic")){
+        if (params.getTag().equals(Constants.VAL_TAG_INIT) || params.getTag().equals(Constants.VAL_TAG_PEREODIC)){
             isUpdate = true;
             initQueryCursor = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                     new String[] { "Distinct " + QuoteColumns.SYMBOL }, null,
@@ -82,7 +82,7 @@ public class StockTaskService extends GcmTaskService{
                 initQueryCursor.moveToFirst();
                 for (int i = 0; i < initQueryCursor.getCount(); i++){
                     mStoredSymbols.append("\""+
-                            initQueryCursor.getString(initQueryCursor.getColumnIndex("symbol"))+"\",");
+                            initQueryCursor.getString(initQueryCursor.getColumnIndex(Constants.KEY_STOCK_SYMBOL))+"\",");
                     initQueryCursor.moveToNext();
                 }
                 mStoredSymbols.replace(mStoredSymbols.length() - 1, mStoredSymbols.length(), ")");
@@ -92,10 +92,10 @@ public class StockTaskService extends GcmTaskService{
                     e.printStackTrace();
                 }
             }
-        } else if (params.getTag().equals("add")){
+        } else if (params.getTag().equals(Constants.VAL_TAG_ADD)){
             isUpdate = false;
             // get symbol from params.getExtra and build query
-            String stockInput = params.getExtras().getString("symbol");
+            String stockInput = params.getExtras().getString(Constants.KEY_STOCK_SYMBOL);
             try {
                 urlStringBuilder.append(URLEncoder.encode("\""+stockInput+"\")", "UTF-8"));
             } catch (UnsupportedEncodingException e){
@@ -112,8 +112,6 @@ public class StockTaskService extends GcmTaskService{
 
         if (urlStringBuilder != null){
             urlString = urlStringBuilder.toString();
-
-            Log.d(LOG_TAG,"New Url: "+urlString);
 
             try{
                 getResponse = fetchData(urlString);

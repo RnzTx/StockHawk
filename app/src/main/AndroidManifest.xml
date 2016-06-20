@@ -57,7 +57,7 @@
 
         <!--Widget Sample-->
         <receiver android:name=".widgets.StockWidgetProvider"
-                  android:label="@string/title_widget_sample">
+                  android:label="@string/widget_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
                 <!--Register Broadcast-->
