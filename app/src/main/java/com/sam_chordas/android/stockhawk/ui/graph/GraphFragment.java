@@ -1,6 +1,7 @@
 package com.sam_chordas.android.stockhawk.ui.graph;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,13 +27,14 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  * BIG THANKS github.com/PhilJay for MPAndroidChart library
  * refer. https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/CubicLineChartActivity.java
- *
+ * TODO add MarkerView
  */
 public class GraphFragment extends Fragment {
 	private static final String LOG_TAG = GraphFragment.class.getSimpleName();
 	LineChart mLineChart;
 	LineDataSet mLineDataSet = new LineDataSet(new ArrayList<Entry>(),"Values");
 	LineData mLineData;
+	Context mContext = getContext();
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
 		// Required empty public constructor
@@ -85,8 +87,8 @@ public class GraphFragment extends Fragment {
 		// create dummy data from label and dataset
 		mLineData = new LineData(xVals,mLineDataSet);
 		mLineChart.setData(mLineData);
-		mLineChart.setDescription(Utils.getStartDate()+" To "+Utils.getEndDate());
-		mLineDataSet.setLabel("Stock Price");
+		mLineChart.setDescription(" ");
+		mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
 		mLineChart.animateXY(2000,2000);
 		mLineChart.invalidate();
 		// get Url
