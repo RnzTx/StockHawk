@@ -7,6 +7,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
 
 import java.util.ArrayList;
 import java.util.List;

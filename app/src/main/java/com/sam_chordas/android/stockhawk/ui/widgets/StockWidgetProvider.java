@@ -1,4 +1,4 @@
-package com.sam_chordas.android.stockhawk.widgets;
+package com.sam_chordas.android.stockhawk.ui.widgets;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -12,9 +12,7 @@ import android.widget.RemoteViews;
 
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.rest.Constants;
-import com.sam_chordas.android.stockhawk.service.StockTaskService;
 import com.sam_chordas.android.stockhawk.ui.graph.GraphActivity;
-import com.sam_chordas.android.stockhawk.ui.graph.GraphFragment;
 
 /**
  * Created by rnztx on 18/6/16.

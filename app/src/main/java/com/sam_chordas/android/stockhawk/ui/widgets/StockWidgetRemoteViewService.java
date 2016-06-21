@@ -1,11 +1,10 @@
-package com.sam_chordas.android.stockhawk.widgets;
+package com.sam_chordas.android.stockhawk.ui.widgets;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 

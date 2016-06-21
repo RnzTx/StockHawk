@@ -1,15 +1,13 @@
 package com.sam_chordas.android.stockhawk.stock_history;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.Cache;
+import com.sam_chordas.android.stockhawk.stock_history.model.HistoryData;
+import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

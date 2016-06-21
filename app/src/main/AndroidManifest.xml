@@ -56,7 +56,7 @@
             android:exported="true"/>
 
         <!--Widget Sample-->
-        <receiver android:name=".widgets.StockWidgetProvider"
+        <receiver android:name=".ui.widgets.StockWidgetProvider"
                   android:label="@string/widget_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -69,7 +69,7 @@
                 />
         </receiver>
         <!--RemoteViews of Widget list-->
-        <service android:name=".widgets.StockWidgetRemoteViewService"
+        <service android:name=".ui.widgets.StockWidgetRemoteViewService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_REMOTEVIEWS">
