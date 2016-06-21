@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,12 @@ import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.rest.Constants;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.stock_history.StockDataTask;
+import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
+import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,10 +39,11 @@ public class GraphFragment extends Fragment {
 	LineChart mLineChart;
 	LineDataSet mLineDataSet = new LineDataSet(new ArrayList<Entry>(),"Values");
 	LineData mLineData;
-	Context mContext = getContext();
+	Realm mRealm;
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
 		// Required empty public constructor
+//		mRealm = RealmController.with(this).getInstance().getRealm();
 	}
 
 
@@ -91,10 +97,13 @@ public class GraphFragment extends Fragment {
 		mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
 		mLineChart.animateXY(2000,2000);
 		mLineChart.invalidate();
-		// get Url
-		String url = Utils.buildStockHistoryDataUrl(stock_name);
-		StockDataTask stockDataTask = new StockDataTask(url,mLineChart, mLineData,mLineDataSet);
+
+		// Download Stock Data
+		StockDataTask stockDataTask = new StockDataTask(stock_name,mLineChart, mLineData,mLineDataSet,this);
 		stockDataTask.execute();
+
+		StockData stockData = RealmController.getInstance().getStockData(stock_name);
+		Log.e(LOG_TAG,"Persisted: "+RealmController.getInstance().hasStockData());
 		return rootView;
 	}
 

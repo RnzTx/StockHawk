@@ -8,6 +8,7 @@ import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by rnztx on 16/6/16.
+ * This Class is used for Gson library
  */
 public class HistoryData{
 	// see Json Data of YQL stock historical data

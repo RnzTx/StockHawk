@@ -5,7 +5,7 @@ import io.realm.RealmObject;
 /**
  * Created by rnztx on 16/6/16.
  */
-public class Quote{
+public class Quote extends RealmObject{
 	public Quote() {
 	}
 
