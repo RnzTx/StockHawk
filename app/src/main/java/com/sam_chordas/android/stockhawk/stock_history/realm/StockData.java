@@ -27,4 +27,8 @@ public class StockData extends RealmObject {
 	public int size(){
 		return stockDataList.size();
 	}
+
+	public RealmList<Quote> getStockDataList() {
+		return stockDataList;
+	}
 }

@@ -15,12 +15,19 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Constants;
 import com.sam_chordas.android.stockhawk.rest.Utils;
+import com.sam_chordas.android.stockhawk.stock_history.StockHistoryDataHandler;
+import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
+import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
+import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by sam_chordas on 9/30/15.
@@ -51,6 +58,7 @@ public class StockTaskService extends GcmTaskService{
 
     @Override
     public int onRunTask(TaskParams params){
+        String stock_symbol = params.getExtras().getString(Constants.KEY_STOCK_SYMBOL);
         Cursor initQueryCursor;
         if (mContext == null){
             mContext = this;
@@ -73,7 +81,7 @@ public class StockTaskService extends GcmTaskService{
                 // Init task. Populates DB with quotes for the symbols seen below
                 try {
                     urlStringBuilder.append(
-                            URLEncoder.encode("\"YHOO\",\"AAPL\",\"GOOG\",\"MSFT\")", "UTF-8"));
+                            URLEncoder.encode("\""+stock_symbol+"\")", "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -95,9 +103,9 @@ public class StockTaskService extends GcmTaskService{
         } else if (params.getTag().equals(Constants.VAL_TAG_ADD)){
             isUpdate = false;
             // get symbol from params.getExtra and build query
-            String stockInput = params.getExtras().getString(Constants.KEY_STOCK_SYMBOL);
+
             try {
-                urlStringBuilder.append(URLEncoder.encode("\""+stockInput+"\")", "UTF-8"));
+                urlStringBuilder.append(URLEncoder.encode("\""+stock_symbol+"\")", "UTF-8"));
             } catch (UnsupportedEncodingException e){
                 e.printStackTrace();
             }
@@ -112,9 +120,13 @@ public class StockTaskService extends GcmTaskService{
 
         if (urlStringBuilder != null){
             urlString = urlStringBuilder.toString();
-
+            Log.e(LOG_TAG,stock_symbol+" URL: "+urlString);
             try{
+                // get current stock info
                 getResponse = fetchData(urlString);
+                // store stock history
+                storeStockHistoryData(stock_symbol);
+
                 result = GcmNetworkManager.RESULT_SUCCESS;
                 try {
                     ContentValues contentValues = new ContentValues();
@@ -140,6 +152,21 @@ public class StockTaskService extends GcmTaskService{
         }
 
         return result;
+    }
+
+    public void storeStockHistoryData(String stockSymbol){
+        try {
+            String url = Utils.buildStockHistoryDataUrl(stockSymbol);
+            List<Quote> rawQuotes = new StockHistoryDataHandler().getStockQuotes(url);
+            StockData stockData = new StockData(stockSymbol, rawQuotes);
+            Realm realm = new RealmController(getApplication()).getRealm();
+            realm.beginTransaction();
+            realm.copyToRealmOrUpdate(stockData);
+            realm.commitTransaction();
+            Log.e(LOG_TAG,"Persisted: "+stockSymbol);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

@@ -18,4 +18,5 @@
     <string name="input_prefill"/>
     <string name="invalid_stock_symbol">Invalid Stock Symbol</string>
     <string name="desc_graph">Stock Price</string>
+    <string name="stock_exist">This stock is already saved!</string>
 </resources>

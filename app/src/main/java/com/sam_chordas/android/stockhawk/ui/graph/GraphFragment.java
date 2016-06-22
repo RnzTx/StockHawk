@@ -1,9 +1,9 @@
 package com.sam_chordas.android.stockhawk.ui.graph;
 
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +16,16 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.rest.Constants;
-import com.sam_chordas.android.stockhawk.rest.Utils;
-import com.sam_chordas.android.stockhawk.stock_history.StockDataTask;
+import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
 import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
 import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,27 +39,60 @@ public class GraphFragment extends Fragment {
 	LineDataSet mLineDataSet = new LineDataSet(new ArrayList<Entry>(),"Values");
 	LineData mLineData;
 	Realm mRealm;
+	RealmController mRealmController;
+	String mStockSymbol;
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
 		// Required empty public constructor
-//		mRealm = RealmController.with(this).getInstance().getRealm();
 	}
 
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mRealmController = RealmController.with(this);
+		mRealm = mRealmController.getRealm();
+		mStockSymbol = getActivity().getIntent().getExtras().getString(Constants.KEY_STOCK_SYMBOL);
+		mLineDataSet.clear();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
-		String stock_name = getActivity().getIntent().getExtras().getString(Constants.KEY_STOCK_SYMBOL);
 		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
-		getActivity().setTitle(stock_name);
+		getActivity().setTitle(mStockSymbol);
 
+		graphStyling();
+
+		// use data from realm database
+		if (mRealmController.hasStockData(mStockSymbol)) {
+			RealmList<Quote> stockDataList = mRealmController.getStockData(mStockSymbol).getStockDataList();
+			ArrayList<String> xVaList = new ArrayList<>();
+			for (int i = 0; i < stockDataList.size(); i++) {
+				Quote quote = stockDataList.get(i);
+				mLineDataSet.addEntry(
+						// add Stock entry to yValues
+						new Entry(Float.valueOf(quote.getClose()), i)
+				);
+				// add date to xValues
+				xVaList.add(quote.getDate());
+			}
+			mLineData = new LineData(xVaList, mLineDataSet);
+			mLineData.notifyDataChanged(); // let Data know its DataSet changed
+			mLineChart.notifyDataSetChanged(); // let chart know its Data changed
+
+			mLineChart.setData(mLineData);
+			mLineChart.setDescription(" ");
+			mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
+			mLineChart.animateXY(2000, 2000);
+			mLineChart.invalidate();// refresh chart
+		}
+		return rootView;
+	}
+	private void graphStyling(){
 		YAxis yAxis = mLineChart.getAxisLeft();
 		XAxis xAxis = mLineChart.getXAxis();
-		// Graph
-		// empty X-axis labels for graph
-		ArrayList<String> xVals = new ArrayList<>();
 
 		// Style as Cubical Line Chart
 		mLineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -88,23 +120,6 @@ public class GraphFragment extends Fragment {
 		mLineChart.getAxisLeft().setDrawAxisLine(false);
 
 		yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-
-
-		// create dummy data from label and dataset
-		mLineData = new LineData(xVals,mLineDataSet);
-		mLineChart.setData(mLineData);
-		mLineChart.setDescription(" ");
-		mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
-		mLineChart.animateXY(2000,2000);
-		mLineChart.invalidate();
-
-		// Download Stock Data
-		StockDataTask stockDataTask = new StockDataTask(stock_name,mLineChart, mLineData,mLineDataSet,this);
-		stockDataTask.execute();
-
-		StockData stockData = RealmController.getInstance().getStockData(stock_name);
-		Log.e(LOG_TAG,"Persisted: "+RealmController.getInstance().hasStockData());
-		return rootView;
 	}
 
 }

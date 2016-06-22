@@ -56,8 +56,8 @@ public class RealmController {
 	}
 
 	// check if data present
-	public boolean hasStockData(){
-		return !realm.where(StockData.class).findAll().isEmpty();
+	public boolean hasStockData(String stock_symbol){
+		return realm.where(StockData.class).equalTo("stock_symbol",stock_symbol).isValid();
 	}
 
 }

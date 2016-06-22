@@ -2,8 +2,10 @@ package com.sam_chordas.android.stockhawk.stock_history;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.stock_history.model.HistoryData;
 import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
+import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -13,7 +15,7 @@ import java.util.List;
 /**
  * Created by rnztx on 16/6/16.
  */
-public class StockHistoryHandler {
+public class StockHistoryDataHandler {
 
 	OkHttpClient mClient = new OkHttpClient();
 	public String fetchStockHistory(String url) {
