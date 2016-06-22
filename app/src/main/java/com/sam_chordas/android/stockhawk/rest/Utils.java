@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class Utils {
     public static final String SYMBOL = "symbol";
     public static final String BID = "Bid";
     public static final String CHANGEIN_PERCENT = "ChangeinPercent";
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
     private static String LOG_TAG = Utils.class.getSimpleName();
     public static boolean showPercent = true;
 
@@ -138,16 +139,16 @@ public class Utils {
 
     public static String getEndDate(){
     //Today's date
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_TEMPLATE, Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
-        return dateFormat.format(calendar.getTime());
+        return Constants.DATE_FORMAT.format(calendar.getTime());
     }
 
     public static String getStartDate(){
-    //Previous Month Date
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+    //Previous Year date
+//        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_TEMPLATE,Locale.ENGLISH);
         Calendar today = Calendar.getInstance();
-        today.add(Calendar.MONTH,-1);
-        return dateFormat.format(today.getTime());
+        today.add(Calendar.MONTH,-12);
+        return Constants.DATE_FORMAT.format(today.getTime());
     }
 }

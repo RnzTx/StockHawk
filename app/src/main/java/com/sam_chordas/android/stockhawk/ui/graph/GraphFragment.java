@@ -18,11 +18,14 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.rest.Constants;
+import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
 import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
 import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -67,10 +70,31 @@ public class GraphFragment extends Fragment {
 
 		// use data from realm database
 		if (mRealmController.hasStockData(mStockSymbol)) {
-			RealmList<Quote> stockDataList = mRealmController.getStockData(mStockSymbol).getStockDataList();
-			ArrayList<String> xVaList = new ArrayList<>();
-			for (int i = 0; i < stockDataList.size(); i++) {
-				Quote quote = stockDataList.get(i);
+			try {
+				Date startDate = Constants.DATE_FORMAT.parse(Utils.getStartDate());
+				populateGraph(startDate);
+
+				mLineData.notifyDataChanged(); // let Data know its DataSet changed
+				mLineChart.notifyDataSetChanged(); // let chart know its Data changed
+
+				mLineChart.setData(mLineData);
+				mLineChart.setDescription(" ");
+				mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
+				mLineChart.animateXY(2000, 2000);
+				mLineChart.invalidate();// refresh chart
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return rootView;
+	}
+	private void populateGraph(Date startDate){
+		RealmList<Quote> stockDataList = mRealmController.getStockData(mStockSymbol).getStockDataList();
+		ArrayList<String> xVaList = new ArrayList<>();
+		for (int i = 0; i < stockDataList.size(); i++) {
+			Quote quote = stockDataList.get(i);
+			// Date comparison for Graph sorting
+			if (quote.getActualDate().after(startDate)){
 				mLineDataSet.addEntry(
 						// add Stock entry to yValues
 						new Entry(Float.valueOf(quote.getClose()), i)
@@ -78,17 +102,8 @@ public class GraphFragment extends Fragment {
 				// add date to xValues
 				xVaList.add(quote.getDate());
 			}
-			mLineData = new LineData(xVaList, mLineDataSet);
-			mLineData.notifyDataChanged(); // let Data know its DataSet changed
-			mLineChart.notifyDataSetChanged(); // let chart know its Data changed
-
-			mLineChart.setData(mLineData);
-			mLineChart.setDescription(" ");
-			mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
-			mLineChart.animateXY(2000, 2000);
-			mLineChart.invalidate();// refresh chart
 		}
-		return rootView;
+		mLineData = new LineData(xVaList, mLineDataSet);
 	}
 	private void graphStyling(){
 		YAxis yAxis = mLineChart.getAxisLeft();

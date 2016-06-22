@@ -2,6 +2,9 @@ package com.sam_chordas.android.stockhawk.rest;
 
 import com.sam_chordas.android.stockhawk.BuildConfig;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * Created by rnztx on 15/6/16.
  */
@@ -16,5 +19,7 @@ public class Constants {
 	public static final String STOCK_TABLE_CURRENT = "yahoo.finance.quotes";
 	public static final String STOCK_TABLE_HISTORY = "yahoo.finance.historicaldata";
 	public static final String ACTION_STOCK_UPDATE = "com.example.sam_chordas.stockhawk.STOCK_DATA_UPDATE";
+	public static final String DATE_FORMAT_TEMPLATE = "yyyy-MM-dd";
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Constants.DATE_FORMAT_TEMPLATE, Locale.ENGLISH);
 
 }

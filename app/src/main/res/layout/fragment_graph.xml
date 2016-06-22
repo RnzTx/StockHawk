@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sam_chordas.android.stockhawk.ui.graph.GraphFragment">
+    tools:context="com.sam_chordas.android.stockhawk.ui.graph.GraphFragment"
+    android:weightSum="5"
+    >
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/stock_line_chart"
         android:layout_width="match_parent"
