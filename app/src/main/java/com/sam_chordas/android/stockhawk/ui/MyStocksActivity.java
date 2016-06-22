@@ -91,7 +91,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
-        mCursorAdapter = new QuoteCursorAdapter(this, null);
+        mCursorAdapter = new QuoteCursorAdapter(this, null,this.getApplication());
         recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
                         new RecyclerViewItemClickListener.OnItemClickListener() {
                             @Override public void onItemClick(View v, int position) {
@@ -118,10 +118,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                 @Override public void onInput(MaterialDialog dialog, CharSequence input) {
                                     // On FAB click, receive user input. Make sure the stock doesn't already exist
                                     // in the DB and proceed accordingly
-                                    Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
-                                            new String[] { QuoteColumns.SYMBOL }, QuoteColumns.SYMBOL + "= ?",
-                                            new String[] { input.toString() }, null);
-                                    if (c.getCount() != 0) {
+//                                    Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
+//                                            new String[] { QuoteColumns.SYMBOL }, QuoteColumns.SYMBOL + "= ?",
+//                                            new String[] { input.toString() }, null);
+                                    if (mRealmController.hasStockData(input.toString().trim().toUpperCase())) {
                                         Toast toast =
                                                 Toast.makeText(MyStocksActivity.this, getResources().getString(R.string.stock_exist),
                                                         Toast.LENGTH_LONG);
@@ -130,7 +130,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                         return;
                                     } else {
                                         // Add the stock to DB
-                                        Log.e(LOG_TAG,"Cursor count: "+c.getCount());
+//                                        Log.e(LOG_TAG,"Cursor count: "+c.getCount());
                                         mServiceIntent.putExtra(Constants.KEY_TAG, Constants.VAL_TAG_ADD);
                                         mServiceIntent.putExtra(Constants.KEY_STOCK_SYMBOL,input.toString().toUpperCase(Locale.ENGLISH));
                                         startService(mServiceIntent);

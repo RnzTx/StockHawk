@@ -57,7 +57,15 @@ public class RealmController {
 
 	// check if data present
 	public boolean hasStockData(String stock_symbol){
-		return realm.where(StockData.class).equalTo("stock_symbol",stock_symbol).isValid();
+		return getStockData(stock_symbol)!=null;
 	}
 
+	public void deleteStockGraphData(String stock_symbol){
+		realm.beginTransaction();
+		if (hasStockData(stock_symbol)){
+			StockData stockData = getStockData(stock_symbol);
+			stockData.deleteFromRealm();
+		}
+		realm.commitTransaction();
+	}
 }

@@ -1,5 +1,6 @@
 package com.sam_chordas.android.stockhawk.rest;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
 import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperAdapter;
 import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperViewHolder;
 
@@ -29,10 +32,12 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
     private static Context mContext;
     private static Typeface robotoLight;
+    private RealmController mRealmController;
     private boolean isPercent;
-    public QuoteCursorAdapter(Context context, Cursor cursor){
+    public QuoteCursorAdapter(Context context, Cursor cursor, Application application){
         super(context, cursor);
         mContext = context;
+        mRealmController = RealmController.with(application);
     }
 
     @Override
@@ -83,6 +88,8 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
         Intent broadcastIntent = new Intent(Constants.ACTION_STOCK_UPDATE)
                         .setPackage(mContext.getPackageName());
         mContext.sendBroadcast(broadcastIntent);
+        // delete stock graph data
+        mRealmController.deleteStockGraphData(symbol);
     }
 
     @Override public int getItemCount() {
