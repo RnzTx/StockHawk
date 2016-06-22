@@ -58,7 +58,10 @@ public class StockTaskService extends GcmTaskService{
 
     @Override
     public int onRunTask(TaskParams params){
-        String stock_symbol = params.getExtras().getString(Constants.KEY_STOCK_SYMBOL);
+        // default value
+        String stock_symbol = Constants.STOCK_SYMBOL_YHOO;
+        if(params!=null && params.getExtras().containsKey(Constants.KEY_STOCK_SYMBOL))
+            stock_symbol = params.getExtras().getString(Constants.KEY_STOCK_SYMBOL);
         Cursor initQueryCursor;
         if (mContext == null){
             mContext = this;
