@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,6 +25,7 @@ import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
 import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -44,6 +46,7 @@ public class GraphFragment extends Fragment {
 	Realm mRealm;
 	RealmController mRealmController;
 	String mStockSymbol;
+	private RadioGroup radioGroup;
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
 		// Required empty public constructor
@@ -59,11 +62,12 @@ public class GraphFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
+		radioGroup = (RadioGroup)rootView.findViewById(R.id.radio_group_graph_time_span);
 		getActivity().setTitle(mStockSymbol);
 
 		graphStyling();
@@ -74,23 +78,52 @@ public class GraphFragment extends Fragment {
 				Date startDate = Constants.DATE_FORMAT.parse(Utils.getStartDate());
 				populateGraph(startDate);
 
-				mLineData.notifyDataChanged(); // let Data know its DataSet changed
-				mLineChart.notifyDataSetChanged(); // let chart know its Data changed
-
-				mLineChart.setData(mLineData);
 				mLineChart.setDescription(" ");
 				mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
-				mLineChart.animateXY(2000, 2000);
+				mLineChart.animateX(1000);
 				mLineChart.invalidate();// refresh chart
 			}catch (Exception e){
 				e.printStackTrace();
 			}
 		}
+
+		radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				int SPAN = Calendar.YEAR;
+				int DURATION = -1;
+				switch (checkedId){
+					case R.id.radio_button_1_week:
+						SPAN = Calendar.WEEK_OF_MONTH;
+						DURATION = -1;
+						break;
+					case R.id.radio_button_1_month:
+						SPAN = Calendar.MONTH;
+						DURATION = -1;
+						break;
+					case R.id.radio_button_3_months:
+						SPAN = Calendar.MONTH;
+						DURATION = -3;
+						break;
+					case R.id.radio_button_6_months:
+						SPAN = Calendar.MONTH;
+						DURATION = -6;
+						break;
+					default:
+						// default is 1 year
+				}
+				Calendar startTime = Calendar.getInstance();
+				startTime.add(SPAN,DURATION);
+				populateGraph(startTime.getTime());
+			}
+		});
 		return rootView;
 	}
 	private void populateGraph(Date startDate){
 		RealmList<Quote> stockDataList = mRealmController.getStockData(mStockSymbol).getStockDataList();
 		ArrayList<String> xVaList = new ArrayList<>();
+		mLineDataSet.clear();
+//		mLineData.clearValues();
 		for (int i = 0; i < stockDataList.size(); i++) {
 			Quote quote = stockDataList.get(i);
 			// Date comparison for Graph sorting
@@ -104,6 +137,10 @@ public class GraphFragment extends Fragment {
 			}
 		}
 		mLineData = new LineData(xVaList, mLineDataSet);
+		mLineChart.setData(mLineData);
+		mLineData.notifyDataChanged(); // let Data know its DataSet changed
+		mLineChart.notifyDataSetChanged(); // let chart know its Data changed
+		mLineChart.invalidate();
 	}
 	private void graphStyling(){
 		YAxis yAxis = mLineChart.getAxisLeft();

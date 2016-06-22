@@ -10,5 +10,48 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/stock_line_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="3"/>
+    <RadioGroup
+        android:id="@+id/radio_group_graph_time_span"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio_button_1_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_button_1_week"
+            android:contentDescription="@string/desc_radio_button_1_week"
+            />
+        <RadioButton
+            android:id="@+id/radio_button_1_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_button_1_month"
+            android:contentDescription="@string/desc_radio_button_1_month"
+            />
+        <RadioButton
+            android:id="@+id/radio_button_3_months"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_button_3_months"
+            android:contentDescription="@string/desc_radio_button_3_months"
+            />
+        <RadioButton
+            android:id="@+id/radio_button_6_months"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_button_6_months"
+            android:contentDescription="@string/desc_radio_button_6_months"
+            />
+        <RadioButton
+            android:id="@+id/radio_button_1_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_button_1_year"
+            android:contentDescription="@string/desc_radio_button_1_year"
+            />
+    </RadioGroup>
 </LinearLayout>

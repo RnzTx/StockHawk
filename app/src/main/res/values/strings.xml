@@ -7,6 +7,17 @@
     <string name="message_invalid_cursor_position"
             translatable="false">Could not move Cursor to position: </string>
 
+    <string name="radio_button_1_week" translatable="false">1W</string>
+    <string name="radio_button_1_month" translatable="false">1M</string>
+    <string name="radio_button_3_months" translatable="false">3M</string>
+    <string name="radio_button_6_months" translatable="false">6M</string>
+    <string name="radio_button_1_year" translatable="false">ALL</string>
+
+    <string name="desc_radio_button_1_week" >stock graph for 1 week</string>
+    <string name="desc_radio_button_1_month" >stock graph for 1 month</string>
+    <string name="desc_radio_button_3_months" >stock graph for 3 month</string>
+    <string name="desc_radio_button_6_months" >stock graph for 6 month</string>
+    <string name="desc_radio_button_1_year" >stock graph for all time</string>
 
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
