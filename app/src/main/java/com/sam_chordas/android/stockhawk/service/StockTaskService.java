@@ -60,7 +60,8 @@ public class StockTaskService extends GcmTaskService{
     public int onRunTask(TaskParams params){
         // default value
         String stock_symbol = Constants.STOCK_SYMBOL_YHOO;
-        if(params!=null && params.getExtras().containsKey(Constants.KEY_STOCK_SYMBOL))
+        if(params!=null && params.getExtras()!=null)
+            if(params.getExtras().containsKey(Constants.KEY_STOCK_SYMBOL))
             stock_symbol = params.getExtras().getString(Constants.KEY_STOCK_SYMBOL);
         Cursor initQueryCursor;
         if (mContext == null){

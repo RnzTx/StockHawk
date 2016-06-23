@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -46,7 +47,8 @@ public class GraphFragment extends Fragment {
 	Realm mRealm;
 	RealmController mRealmController;
 	String mStockSymbol;
-	private RadioGroup radioGroup;
+	RadioGroup radioGroup;
+	RadioButton radioButtonMonth;
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
 		// Required empty public constructor
@@ -68,6 +70,7 @@ public class GraphFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
 		radioGroup = (RadioGroup)rootView.findViewById(R.id.radio_group_graph_time_span);
+		radioButtonMonth = (RadioButton)rootView.findViewById(R.id.radio_button_1_month);
 		getActivity().setTitle(mStockSymbol);
 
 		graphStyling();
@@ -75,8 +78,10 @@ public class GraphFragment extends Fragment {
 		// use data from realm database
 		if (mRealmController.hasStockData(mStockSymbol)) {
 			try {
-				Date startDate = Constants.DATE_FORMAT.parse(Utils.getStartDate());
-				populateGraph(startDate);
+				Calendar startDateMonth = Calendar.getInstance();
+				startDateMonth.add(Calendar.MONTH,-1);
+				populateGraph(startDateMonth.getTime());
+				radioGroup.check(R.id.radio_button_1_month);
 
 				mLineChart.setDescription(" ");
 				mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
