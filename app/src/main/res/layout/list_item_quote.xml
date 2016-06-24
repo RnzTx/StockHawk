@@ -1,44 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/list_item_stock_quote"
+<android.support.v7.widget.CardView
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    >
-  <TextView
-      android:id="@+id/stock_symbol"
-      style="@style/StockSymbolTextStyle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:gravity="end|center_vertical"
-      tools:text="GOOG"
-      android:textColor="@android:color/darker_gray"
-      />
-  <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:gravity="end"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/list_item_margin"
+    android:layout_marginStart="@dimen/list_item_margin"
+    android:layout_marginEnd="@dimen/list_item_margin"
+    android:layout_marginRight="@dimen/list_item_margin"
+    android:layout_marginBottom="@dimen/list_item_margin"
+    app:cardElevation="@dimen/cardview_default_elevation"
+    app:cardCornerRadius="@dimen/cardview_default_radius"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/list_item_stock_quote"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
       >
     <TextView
-        android:id="@+id/bid_price"
-        style="@style/BidPriceTextStyle"
+        android:id="@+id/stock_symbol"
+        style="@style/StockSymbolTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="1000.00"
-        android:textColor="@android:color/darker_gray"
+        android:gravity="end|center_vertical"
+        tools:text="GOOG"
         />
-    <TextView
-        android:id="@+id/change"
-        android:background="@drawable/percent_change_pill"
-        style="@style/PercentChangeTextStyle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="100%"
-        />
+        android:layout_weight="1"
+        android:gravity="end"
+        >
+      <TextView
+          android:id="@+id/bid_price"
+          style="@style/BidPriceTextStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:text="1000.00"
+          />
+      <TextView
+          android:id="@+id/change"
+          android:background="@drawable/percent_change_pill"
+          style="@style/PercentChangeTextStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:text="100%"
+          />
+    </LinearLayout>
   </LinearLayout>
-</LinearLayout>
+</android.support.v7.widget.CardView>

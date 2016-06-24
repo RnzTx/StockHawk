@@ -102,10 +102,12 @@ public class GraphFragment extends Fragment {
 		if (mRealmController.hasStockData(mStockSymbol)) {
 			try {
 				graphStyling();
+				// display month of Data by default
 				Calendar startDateMonth = Calendar.getInstance();
 				startDateMonth.add(Calendar.MONTH,-1);
 				populateGraph(startDateMonth.getTime());
 
+				// add MarkerView to browse stock price in history
 				markerView = new CustomMarkerView(getContext(),R.layout.marker_view_layout);
 				mLineChart.setMarkerView(markerView);
 				mLineChart.invalidate();

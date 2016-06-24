@@ -17,6 +17,9 @@
     <dimen name="padding_price_change">3dp</dimen>
     <dimen name="padding_bid_price">10sp</dimen>
 
+    <dimen name="list_item_margin">10dp</dimen>
+    <dimen name="card_view_elevation">8dp</dimen>
+    <dimen name="card_view_corner_radius">2dp</dimen>
     <!--Dimensions for Graph Fragment-->
     <dimen name="txt_size_stock_price">30sp</dimen>
 </resources>

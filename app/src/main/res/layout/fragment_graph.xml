@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="8dp"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/card_view_elevation"
         >
         <LinearLayout
             android:orientation="vertical"
