@@ -124,7 +124,7 @@ public class StockTaskService extends GcmTaskService{
 
         if (urlStringBuilder != null){
             urlString = urlStringBuilder.toString();
-            Log.e(LOG_TAG,stock_symbol+" URL: "+urlString);
+//            Log.e(LOG_TAG,stock_symbol+" URL: "+urlString);
             try{
                 // get current stock info
                 getResponse = fetchData(urlString);
@@ -167,7 +167,7 @@ public class StockTaskService extends GcmTaskService{
             realm.beginTransaction();
             realm.copyToRealmOrUpdate(stockData);
             realm.commitTransaction();
-            Log.e(LOG_TAG,"Persisted: "+stockSymbol);
+//            Log.e(LOG_TAG,"Persisted: "+stockSymbol);
         }catch (Exception e){
             e.printStackTrace();
         }

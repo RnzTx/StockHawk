@@ -86,7 +86,7 @@ public class GraphFragment extends Fragment {
 				new String[]{"1"},
 				null
 		);
-		Log.e(LOG_TAG,"Cursor: "+mCursor.getCount());
+
 		mCursor.moveToFirst();
 		String bid_price = "$"+mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
 
@@ -226,7 +226,6 @@ public class GraphFragment extends Fragment {
 			SimpleDateFormat SimpleFormat = new SimpleDateFormat("dd MMM yyyy",Locale.ENGLISH);
 			String date = SimpleFormat.format(quote.getActualDate());
 			tv_stock_history.setText(date.concat(price));
-			Log.e(LOG_TAG,highlight.toString());
 		}
 
 		@Override
