@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,10 +54,9 @@ public class GraphFragment extends Fragment {
 	Realm mRealm;
 	RealmController mRealmController;
 	String mStockSymbol;
-	RadioGroup radioGroup;
-	RadioButton radioButtonMonth;
 	Cursor mCursor;
 	TextView tv_stock_history;
+	TabLayout tab_time_span;
 	private CustomMarkerView markerView;
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
@@ -93,22 +93,19 @@ public class GraphFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 		TextView tv_bid_price = (TextView)rootView.findViewById(R.id.tv_bid_price);
 		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
-		radioGroup = (RadioGroup)rootView.findViewById(R.id.radio_group_graph_time_span);
-		radioButtonMonth = (RadioButton)rootView.findViewById(R.id.radio_button_1_month);
 		tv_stock_history = (TextView)rootView.findViewById(R.id.tv_bid_price_history);
-
+		tab_time_span = (TabLayout)rootView.findViewById(R.id.tabbar_time_span);
 		// set Current Stock Price
 		tv_bid_price.setText(bid_price);
 
 		// use data from realm database
 		if (mRealmController.hasStockData(mStockSymbol)) {
 			try {
+				graphStyling();
 				Calendar startDateMonth = Calendar.getInstance();
 				startDateMonth.add(Calendar.MONTH,-1);
 				populateGraph(startDateMonth.getTime());
-				radioGroup.check(R.id.radio_button_1_month);
 
-				graphStyling();
 				markerView = new CustomMarkerView(getContext(),R.layout.marker_view_layout);
 				mLineChart.setMarkerView(markerView);
 				mLineChart.invalidate();
@@ -117,34 +114,41 @@ public class GraphFragment extends Fragment {
 			}
 		}
 
-		radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+		tab_time_span.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
+			public void onTabSelected(TabLayout.Tab tab) {
+				int position = tab.getPosition();
 				int SPAN = Calendar.YEAR;
 				int DURATION = -1;
-				switch (checkedId){
-					case R.id.radio_button_1_week:
-						SPAN = Calendar.WEEK_OF_MONTH;
-						DURATION = -1;
-						break;
-					case R.id.radio_button_1_month:
+				switch (position){
+					case 0:
 						SPAN = Calendar.MONTH;
 						DURATION = -1;
 						break;
-					case R.id.radio_button_3_months:
+					case 1:
 						SPAN = Calendar.MONTH;
 						DURATION = -3;
 						break;
-					case R.id.radio_button_6_months:
+					case 2:
 						SPAN = Calendar.MONTH;
 						DURATION = -6;
 						break;
 					default:
-						// default is 1 year
+						break;
 				}
 				Calendar startTime = Calendar.getInstance();
 				startTime.add(SPAN,DURATION);
 				populateGraph(startTime.getTime());
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+
 			}
 		});
 		return rootView;
