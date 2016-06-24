@@ -3,14 +3,15 @@ package com.sam_chordas.android.stockhawk.ui.graph;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,15 +21,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.rest.Constants;
-import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
 import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
-import com.sam_chordas.android.stockhawk.stock_history.realm.StockData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -59,7 +57,7 @@ public class GraphFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		mRealmController = RealmController.with(this);
 		mRealm = mRealmController.getRealm();
-		mStockSymbol = getActivity().getIntent().getExtras().getString(Constants.KEY_STOCK_SYMBOL);
+
 		mLineDataSet.clear();
 	}
 
@@ -67,13 +65,15 @@ public class GraphFragment extends Fragment {
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
+		Bundle arguments = getArguments();
+		if (arguments!=null)
+			mStockSymbol = arguments.getString(Constants.KEY_STOCK_SYMBOL);
+
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
 		radioGroup = (RadioGroup)rootView.findViewById(R.id.radio_group_graph_time_span);
 		radioButtonMonth = (RadioButton)rootView.findViewById(R.id.radio_button_1_month);
-		getActivity().setTitle(mStockSymbol);
 
-		graphStyling();
 
 		// use data from realm database
 		if (mRealmController.hasStockData(mStockSymbol)) {
@@ -83,10 +83,7 @@ public class GraphFragment extends Fragment {
 				populateGraph(startDateMonth.getTime());
 				radioGroup.check(R.id.radio_button_1_month);
 
-				mLineChart.setDescription(" ");
-				mLineDataSet.setLabel(getResources().getString(R.string.desc_graph));
-				mLineChart.animateX(1000);
-				mLineChart.invalidate();// refresh chart
+				graphStyling();
 			}catch (Exception e){
 				e.printStackTrace();
 			}
@@ -158,25 +155,35 @@ public class GraphFragment extends Fragment {
 		// disable draw circles
 		mLineDataSet.setDrawCircles(false);
 		// fill chart with color
-		mLineDataSet.setDrawFilled(true);
+//		mLineDataSet.setDrawFilled(true);
 
 		// data border color
 		mLineDataSet.setColor(GRAPH_COLOR);
 		// data color transparency level 0-255
 		mLineDataSet.setFillAlpha(255);
 		// data fill color
-		mLineDataSet.setFillColor(GRAPH_COLOR);
+//		mLineDataSet.setFillColor(GRAPH_COLOR);
 
-		// disable xAxis grid lines
+		// disable grid lines
 		xAxis.setDrawGridLines(false);
+		yAxis.setDrawGridLines(false);
 		// remove right side markings
 		mLineChart.getAxisRight().setEnabled(false);
-		// remove top markings
-		mLineChart.getXAxis().setDrawAxisLine(false);
-		// remove y axis lines
-		mLineChart.getAxisLeft().setDrawAxisLine(false);
+		// remove x axis info
+//		mLineChart.getXAxis().setDrawAxisLine(false);
+		mLineChart.getXAxis().setEnabled(false);
+		// remove y axis info
+//		mLineChart.getAxisLeft().setDrawAxisLine(false);
+		mLineChart.getAxisLeft().setEnabled(false);
+		mLineChart.setDescription(" ");
 
-		yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+		mLineChart.getLegend().setEnabled(false);
+//		yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+		mLineChart.setViewPortOffsets(0,0,0,0);
+		mLineChart.setPinchZoom(false);
+		mLineChart.setDoubleTapToZoomEnabled(false);
+		mLineChart.invalidate();// refresh chart
+
 	}
 
 }

@@ -77,7 +77,7 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 			int priceChangeColorId;
 
 			// get Stock Quote information
-			String stockSymbol = mCursor.getString(mCursor.getColumnIndex("symbol"));
+			String stockSymbol = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.SYMBOL));
 			String stockBidPrice = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
 			String stockPriceChange = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.CHANGE));
 			int isUp = mCursor.getInt(mCursor.getColumnIndex(QuoteColumns.ISUP));

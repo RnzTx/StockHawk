@@ -9,7 +9,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:text="@string/app_name"
         android:textSize="@dimen/text_size_widget_title"
-        android:background="@color/material_blue_500"
+        android:background="@color/color_primary"
         android:textColor="@android:color/background_light"
         android:gravity="start|center_vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"

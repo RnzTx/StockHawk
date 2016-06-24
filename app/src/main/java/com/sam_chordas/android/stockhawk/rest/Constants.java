@@ -10,6 +10,7 @@ import java.util.Locale;
  */
 public class Constants {
 	public static final String KEY_STOCK_SYMBOL = "symbol";
+	public static final String KEY_TAB_POSITION = "tab_position";
 	public static final String STOCK_SYMBOL_YHOO = "YHOO";
 	public static final String KEY_TAG = "tag";
 	public static final String VAL_TAG_ADD = "add";
