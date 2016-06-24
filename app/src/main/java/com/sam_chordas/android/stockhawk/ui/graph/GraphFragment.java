@@ -1,11 +1,13 @@
 package com.sam_chordas.android.stockhawk.ui.graph;
 
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +16,25 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.sam_chordas.android.stockhawk.R;
+import com.sam_chordas.android.stockhawk.data.QuoteColumns;
+import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Constants;
 import com.sam_chordas.android.stockhawk.stock_history.model.Quote;
 import com.sam_chordas.android.stockhawk.stock_history.realm.RealmController;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -47,6 +55,9 @@ public class GraphFragment extends Fragment {
 	String mStockSymbol;
 	RadioGroup radioGroup;
 	RadioButton radioButtonMonth;
+	Cursor mCursor;
+	TextView tv_stock_history;
+	private CustomMarkerView markerView;
 	static final int GRAPH_COLOR = Color.rgb(33,150,243);
 	public GraphFragment() {
 		// Required empty public constructor
@@ -57,7 +68,6 @@ public class GraphFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		mRealmController = RealmController.with(this);
 		mRealm = mRealmController.getRealm();
-
 		mLineDataSet.clear();
 	}
 
@@ -69,11 +79,26 @@ public class GraphFragment extends Fragment {
 		if (arguments!=null)
 			mStockSymbol = arguments.getString(Constants.KEY_STOCK_SYMBOL);
 
+		mCursor = getContext().getContentResolver().query(
+				QuoteProvider.Quotes.withSymbol(mStockSymbol),
+				null,
+				QuoteColumns.ISCURRENT + " = ?",
+				new String[]{"1"},
+				null
+		);
+		Log.e(LOG_TAG,"Cursor: "+mCursor.getCount());
+		mCursor.moveToFirst();
+		String bid_price = "$"+mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
+
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
+		TextView tv_bid_price = (TextView)rootView.findViewById(R.id.tv_bid_price);
 		mLineChart = (LineChart)rootView.findViewById(R.id.stock_line_chart);
 		radioGroup = (RadioGroup)rootView.findViewById(R.id.radio_group_graph_time_span);
 		radioButtonMonth = (RadioButton)rootView.findViewById(R.id.radio_button_1_month);
+		tv_stock_history = (TextView)rootView.findViewById(R.id.tv_bid_price_history);
 
+		// set Current Stock Price
+		tv_bid_price.setText(bid_price);
 
 		// use data from realm database
 		if (mRealmController.hasStockData(mStockSymbol)) {
@@ -84,6 +109,9 @@ public class GraphFragment extends Fragment {
 				radioGroup.check(R.id.radio_button_1_month);
 
 				graphStyling();
+				markerView = new CustomMarkerView(getContext(),R.layout.marker_view_layout);
+				mLineChart.setMarkerView(markerView);
+				mLineChart.invalidate();
 			}catch (Exception e){
 				e.printStackTrace();
 			}
@@ -132,7 +160,7 @@ public class GraphFragment extends Fragment {
 			if (quote.getActualDate().after(startDate)){
 				mLineDataSet.addEntry(
 						// add Stock entry to yValues
-						new Entry(Float.valueOf(quote.getClose()), i)
+						new Entry(Float.valueOf(quote.getClose()), i,quote)
 				);
 				// add date to xValues
 				xVaList.add(quote.getDate());
@@ -186,4 +214,29 @@ public class GraphFragment extends Fragment {
 
 	}
 
+	private class CustomMarkerView extends MarkerView{
+		public CustomMarkerView(Context context, int layoutResource) {
+			super(context, layoutResource);
+		}
+
+		@Override
+		public void refreshContent(Entry e, Highlight highlight) {
+			Quote quote = (Quote)e.getData();
+			String price = String.format(Locale.ENGLISH,"\t\t$%.2f",Float.valueOf(quote.getClose()));
+			SimpleDateFormat SimpleFormat = new SimpleDateFormat("dd MMM yyyy",Locale.ENGLISH);
+			String date = SimpleFormat.format(quote.getActualDate());
+			tv_stock_history.setText(date.concat(price));
+			Log.e(LOG_TAG,highlight.toString());
+		}
+
+		@Override
+		public int getXOffset(float xpos) {
+			return 0;
+		}
+
+		@Override
+		public int getYOffset(float ypos) {
+			return 0;
+		}
+	}
 }

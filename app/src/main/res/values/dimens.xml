@@ -16,4 +16,7 @@
     <dimen name="text_size_widget_title">24sp</dimen>
     <dimen name="padding_price_change">3dp</dimen>
     <dimen name="padding_bid_price">10sp</dimen>
+
+    <!--Dimensions for Graph Fragment-->
+    <dimen name="txt_size_stock_price">30sp</dimen>
 </resources>
