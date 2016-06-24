@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.h6ah4i.android.tablayouthelper.TabLayoutHelper;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -23,6 +25,7 @@ public class GraphActivity extends AppCompatActivity {
 	PageAdapter mPageAdapter;
 	ViewPager mViewPager;
 	TabLayout mTabLayout;
+	TabLayoutHelper mTabLayoutHelper;
 	Context mContext =this;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +38,13 @@ public class GraphActivity extends AppCompatActivity {
 
 		mTabLayout = (TabLayout)findViewById(R.id.tabbar_stock_symbol);
 		mTabLayout.setupWithViewPager(mViewPager);
+
+		// Auto Adjust Tab mode.. Scrollable | centered
+		mTabLayoutHelper = new TabLayoutHelper(mTabLayout,mViewPager);
+		mTabLayoutHelper.setAutoAdjustTabModeEnabled(true);
 		int tab_position = getIntent().getIntExtra(Constants.KEY_TAB_POSITION,0);
 		mTabLayout.getTabAt(tab_position).select();
+
 	}
 	public class PageAdapter extends FragmentPagerAdapter{
 		Cursor mCursor;
@@ -48,8 +56,8 @@ public class GraphActivity extends AppCompatActivity {
 				mCursor = mContext.getContentResolver().query(
 						QuoteProvider.Quotes.CONTENT_URI,
 						new String[]{QuoteColumns.SYMBOL},
-						null,
-						null,
+						QuoteColumns.ISCURRENT + " = ?",
+						new String[]{"1"},
 						null
 				);
 				// create distinct symbol list
