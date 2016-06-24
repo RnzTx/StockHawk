@@ -42,9 +42,33 @@ public class GraphActivity extends AppCompatActivity {
 		// Auto Adjust Tab mode.. Scrollable | centered
 		mTabLayoutHelper = new TabLayoutHelper(mTabLayout,mViewPager);
 		mTabLayoutHelper.setAutoAdjustTabModeEnabled(true);
-		int tab_position = getIntent().getIntExtra(Constants.KEY_TAB_POSITION,0);
-		mTabLayout.getTabAt(tab_position).select();
 
+		// select tab on list item selection demand
+		int tab_position = getIntent().getIntExtra(Constants.KEY_TAB_POSITION,0);
+		TabLayout.Tab initialTab = mTabLayout.getTabAt(tab_position);
+		if (initialTab!=null) {
+			setActionbarTitle(initialTab.getText().toString());
+			initialTab.select();
+		}
+		// handle selection
+		mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				setActionbarTitle(tab.getText().toString());
+				tab.select();
+				mViewPager.setCurrentItem(tab.getPosition(),true);
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+
+			}
+		});
 	}
 	public class PageAdapter extends FragmentPagerAdapter{
 		Cursor mCursor;
@@ -96,5 +120,21 @@ public class GraphActivity extends AppCompatActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+	}
+
+	public void setActionbarTitle(String symbol){
+		Cursor cursor = mContext.getContentResolver().query(
+				QuoteProvider.Quotes.withSymbol(symbol),
+				new String[]{QuoteColumns.NAME},
+				QuoteColumns.ISCURRENT + " = ?",
+				new String[]{"1"},
+				null
+		);
+		if (cursor!=null && cursor.moveToFirst()){
+			String company_name = cursor.getString(cursor.getColumnIndex(QuoteColumns.NAME));
+			getSupportActionBar().setTitle(company_name);
+			cursor.close();
+		}
+
 	}
 }

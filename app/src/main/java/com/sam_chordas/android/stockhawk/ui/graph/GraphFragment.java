@@ -86,9 +86,13 @@ public class GraphFragment extends Fragment {
 				new String[]{"1"},
 				null
 		);
-
-		mCursor.moveToFirst();
-		String bid_price = "$"+mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
+		String bid_price = "0";
+		try{
+			mCursor.moveToFirst();
+			bid_price = "$"+mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 
 		View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 		TextView tv_bid_price = (TextView)rootView.findViewById(R.id.tv_bid_price);
@@ -141,6 +145,7 @@ public class GraphFragment extends Fragment {
 				Calendar startTime = Calendar.getInstance();
 				startTime.add(SPAN,DURATION);
 				populateGraph(startTime.getTime());
+				tab.select();
 			}
 
 			@Override

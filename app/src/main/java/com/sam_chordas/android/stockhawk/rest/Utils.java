@@ -28,6 +28,7 @@ public class Utils {
     public static final String SYMBOL = "symbol";
     public static final String BID = "Bid";
     public static final String CHANGEIN_PERCENT = "ChangeinPercent";
+    public static final String NAME = "Name";
 
     private static String LOG_TAG = Utils.class.getSimpleName();
     public static boolean showPercent = true;
@@ -107,6 +108,8 @@ public class Utils {
             builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
                     jsonObject.getString(CHANGEIN_PERCENT), true));
             builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
+            // get Company Name
+            builder.withValue(QuoteColumns.NAME,jsonObject.getString(NAME));
             builder.withValue(QuoteColumns.ISCURRENT, 1);
             if (change.charAt(0) == '-'){
                 builder.withValue(QuoteColumns.ISUP, 0);
