@@ -83,7 +83,7 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 			int isUp = mCursor.getInt(mCursor.getColumnIndex(QuoteColumns.ISUP));
 
 			// create List Item for Widget ListView
-			RemoteViews listItemRemoteView = new RemoteViews(mContext.getPackageName(), R.layout.list_item_quote);
+			RemoteViews listItemRemoteView = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
 			listItemRemoteView.setTextViewText(R.id.stock_symbol,stockSymbol);
 			listItemRemoteView.setTextViewText(R.id.bid_price,stockBidPrice);
 			listItemRemoteView.setTextViewText(R.id.change,stockPriceChange);
@@ -97,10 +97,7 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 
 			// set Onclick Item Intent
 			Intent onClickItemIntent = new Intent();
-			Bundle arguments = new Bundle();
-			arguments.putString(Constants.KEY_STOCK_SYMBOL,stockSymbol);
-			onClickItemIntent.putExtras(arguments);
-
+			onClickItemIntent.putExtra(Constants.KEY_TAB_POSITION,position);
 			listItemRemoteView.setOnClickFillInIntent(R.id.list_item_stock_quote,onClickItemIntent);
 			return listItemRemoteView;
 		}
