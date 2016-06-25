@@ -5,7 +5,7 @@
     <string name="message_invalid_cursor"
             translatable="false">This should only be called when Cursor is valid</string>
     <string name="message_invalid_cursor_position"
-            translatable="false">Could not move Cursor to position: </string>
+            translatable="false">Could could not move Cursor to position: </string>
 
     <string name="tab_1_week" translatable="false">1W</string>
     <string name="tab_1_month" translatable="false">1M</string>
@@ -24,7 +24,7 @@
     <string name="action_change_units">Change Units</string>
     <string name="symbol_search">Symbol Search</string>
     <string name="content_test">Search for a Stock Symbol</string>
-    <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+    <string name="network_toast">This app requires an internet connection</string>
     <string name="desc_button_add_stock">add new stock</string>
     <string name="input_prefill"/>
     <string name="invalid_stock_symbol">Invalid Stock Symbol</string>

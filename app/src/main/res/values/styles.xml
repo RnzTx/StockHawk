@@ -20,10 +20,10 @@
   </style>
   <style name="BidPriceTextStyle">
     <item name="android:textSize">20sp</item>
-    <item name="android:paddingEnd">@dimen/padding_bid_price</item>
-    <item name="android:paddingRight">@dimen/padding_bid_price</item>
     <item name="android:paddingStart">@dimen/padding_bid_price</item>
+    <item name="android:paddingEnd">@dimen/padding_bid_price</item>
     <item name="android:paddingLeft">@dimen/padding_bid_price</item>
+    <item name="android:paddingRight">@dimen/padding_bid_price</item>
     <item name="android:textColor">@color/color_primary_dark</item>
   </style>
   <style name="StockSymbolTextStyle">
