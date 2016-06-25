@@ -108,6 +108,10 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
             change = (TextView) itemView.findViewById(R.id.change);
         }
 
+	    /**
+         * To ensure CardView functionality on MainActivity,
+         * removing background color operations
+         */
         @Override
         public void onItemSelected(){
 //            itemView.setBackgroundColor(Color.LTGRAY);
@@ -118,13 +122,5 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 //            itemView.setBackgroundColor(0);
         }
 
-	    /**
-             * As RecyclerViewItemClickListener is provided
-             * so removing this listener
-             */
-//        @Override
-//        public void onClick(View v) {
-//
-//        }
     }
 }

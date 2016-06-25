@@ -34,7 +34,7 @@ public class StockIntentService extends IntentService {
       stockTaskService.onRunTask(new TaskParams(tag,arguments));
     }catch (Exception e){
 	    /**
-         * Create Handler to post message on Main Thread
+         * Create Handler to post Toast on UI thread
          * http://stackoverflow.com/a/20062900
          */
       Handler handler = new Handler(getMainLooper());

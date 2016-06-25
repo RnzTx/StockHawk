@@ -14,9 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:supportsRtl="true"
-        >
-
+        android:supportsRtl="true">
 
         <permission
             android:name="com.google.android.gcm.demo.permission.C2D_MESSAGE"
@@ -25,7 +23,9 @@
 
         <activity
             android:name=".ui.MyStocksActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -34,7 +34,9 @@
         </activity>
         <activity
             android:name=".ui.graph.GraphActivity"
-            android:parentActivityName=".ui.MyStocksActivity">
+            android:parentActivityName=".ui.MyStocksActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MyStocksActivity"

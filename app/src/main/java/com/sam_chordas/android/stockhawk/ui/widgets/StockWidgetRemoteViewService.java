@@ -73,33 +73,38 @@ public class StockWidgetRemoteViewService extends RemoteViewsService {
 
 		@Override
 		public RemoteViews getViewAt(int position) {
-			mCursor.moveToPosition(position);
-			int priceChangeColorId;
+			try{
+				mCursor.moveToPosition(position);
+				int priceChangeColorId;
 
-			// get Stock Quote information
-			String stockSymbol = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.SYMBOL));
-			String stockBidPrice = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
-			String stockPriceChange = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.CHANGE));
-			int isUp = mCursor.getInt(mCursor.getColumnIndex(QuoteColumns.ISUP));
+				// get Stock Quote information
+				String stockSymbol = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.SYMBOL));
+				String stockBidPrice = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.BIDPRICE));
+				String stockPriceChange = mCursor.getString(mCursor.getColumnIndex(QuoteColumns.CHANGE));
+				int isUp = mCursor.getInt(mCursor.getColumnIndex(QuoteColumns.ISUP));
 
-			// create List Item for Widget ListView
-			RemoteViews listItemRemoteView = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
-			listItemRemoteView.setTextViewText(R.id.stock_symbol,stockSymbol);
-			listItemRemoteView.setTextViewText(R.id.bid_price,stockBidPrice);
-			listItemRemoteView.setTextViewText(R.id.change,stockPriceChange);
+				// create List Item for Widget ListView
+				RemoteViews listItemRemoteView = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
+				listItemRemoteView.setTextViewText(R.id.stock_symbol,stockSymbol);
+				listItemRemoteView.setTextViewText(R.id.bid_price,stockBidPrice);
+				listItemRemoteView.setTextViewText(R.id.change,stockPriceChange);
 
-			// if stock price is Up then background of price Change is Green else, Red
-			if (isUp==1)
-				priceChangeColorId = R.drawable.percent_change_pill_green;
-			else
-				priceChangeColorId = R.drawable.percent_change_pill_red;
-			listItemRemoteView.setInt(R.id.change,"setBackgroundResource",priceChangeColorId);
+				// if stock price is Up then background of price Change is Green else, Red
+				if (isUp==1)
+					priceChangeColorId = R.drawable.percent_change_pill_green;
+				else
+					priceChangeColorId = R.drawable.percent_change_pill_red;
+				listItemRemoteView.setInt(R.id.change,"setBackgroundResource",priceChangeColorId);
 
-			// set Onclick Item Intent
-			Intent onClickItemIntent = new Intent();
-			onClickItemIntent.putExtra(Constants.KEY_TAB_POSITION,position);
-			listItemRemoteView.setOnClickFillInIntent(R.id.list_item_stock_quote,onClickItemIntent);
-			return listItemRemoteView;
+				// set Onclick Item Intent
+				Intent onClickItemIntent = new Intent();
+				onClickItemIntent.putExtra(Constants.KEY_TAB_POSITION,position);
+				listItemRemoteView.setOnClickFillInIntent(R.id.list_item_stock_quote,onClickItemIntent);
+				return listItemRemoteView;
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+			return null;
 		}
 
 		@Override

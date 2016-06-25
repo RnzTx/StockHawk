@@ -10,8 +10,11 @@ import io.realm.Realm;
  * Created by rnztx on 21/6/16.
  * Thanks to Ravi Tamada for Awesome Blog about Realm database integration
  * http://www.androidhive.info/2016/05/android-working-with-realm-database-replacing-sqlite-core-data/
+ *
+ * All Realm database operations will be done through this class
  */
 public class RealmController {
+	public static final String STOCK_SYMBOL = "stock_symbol";
 	private static RealmController instance;
 	private final Realm realm;
 	public RealmController(Application application){
@@ -52,7 +55,7 @@ public class RealmController {
 		return realm;
 	}
 	public StockData getStockData(String stock_symbol){
-		return realm.where(StockData.class).equalTo("stock_symbol",stock_symbol).findFirst();
+		return realm.where(StockData.class).equalTo(STOCK_SYMBOL,stock_symbol).findFirst();
 	}
 
 	// check if data present

@@ -29,6 +29,6 @@
     <string name="input_prefill"/>
     <string name="invalid_stock_symbol">Invalid Stock Symbol</string>
     <string name="desc_graph">Stock Price</string>
-    <string name="stock_exist">This stock is already saved!</string>
+    <string name="stock_exist">Stock is already saved</string>
     <string name="tv_stock_history">tap a graph</string>
 </resources>

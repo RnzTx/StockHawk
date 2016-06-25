@@ -232,6 +232,7 @@ public class GraphFragment extends Fragment {
 
 		@Override
 		public void refreshContent(Entry e, Highlight highlight) {
+			// when marker is selected, update data on cardView
 			Quote quote = (Quote)e.getData();
 			String price = String.format(Locale.ENGLISH,"\t\t$%.2f",Float.valueOf(quote.getClose()));
 			SimpleDateFormat SimpleFormat = new SimpleDateFormat("dd MMM yyyy",Locale.ENGLISH);

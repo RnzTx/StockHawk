@@ -13,7 +13,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by rnztx on 21/6/16.
+ * This class will be stored in Realm Database
  */
 public class StockData extends RealmObject {
 	private static final String LOG_TAG = StockData.class.getSimpleName();

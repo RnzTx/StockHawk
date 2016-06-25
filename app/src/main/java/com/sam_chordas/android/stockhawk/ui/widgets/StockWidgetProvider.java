@@ -47,7 +47,6 @@ public class StockWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	// Receive Broadcast About Stock Data Update
-		Log.d(LOG_TAG,"Broadcast Received updating widgets");
 		super.onReceive(context, intent);
 		if (intent.getAction().equals(Constants.ACTION_STOCK_UPDATE)){
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

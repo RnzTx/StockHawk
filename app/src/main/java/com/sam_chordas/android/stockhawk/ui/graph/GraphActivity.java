@@ -33,6 +33,8 @@ public class GraphActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_graph);
 		getSupportActionBar().setElevation(0);
+
+		// create Tabs
 		mPageAdapter = new PageAdapter(getSupportFragmentManager());
 
 		mViewPager = (ViewPager)findViewById(R.id.view_pager);
@@ -45,7 +47,10 @@ public class GraphActivity extends AppCompatActivity {
 		mTabLayoutHelper = new TabLayoutHelper(mTabLayout,mViewPager);
 		mTabLayoutHelper.setAutoAdjustTabModeEnabled(true);
 
-		// select tab on list item selection demand
+		/**
+		 * when specific stock is selected for graph information,
+		 * graph for that stock is is displayed in tab.
+		 */
 		int tab_position = getIntent().getIntExtra(Constants.KEY_TAB_POSITION,0);
 		TabLayout.Tab initialTab = mTabLayout.getTabAt(tab_position);
 		if (initialTab!=null) {
@@ -56,6 +61,7 @@ public class GraphActivity extends AppCompatActivity {
 		mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
 			public void onTabSelected(TabLayout.Tab tab) {
+				// read Company name from SQLite database & set actionbar Title
 				setActionbarTitle(tab.getText().toString());
 				tab.select();
 				mViewPager.setCurrentItem(tab.getPosition(),true);
@@ -72,6 +78,7 @@ public class GraphActivity extends AppCompatActivity {
 			}
 		});
 	}
+	// page adapter for ViewPager
 	public class PageAdapter extends FragmentPagerAdapter{
 		Cursor mCursor;
 		ArrayList<String> symbolList = new ArrayList<>();
@@ -101,6 +108,7 @@ public class GraphActivity extends AppCompatActivity {
 		}
 		@Override
 		public Fragment getItem(int position) {
+			// create tabs for all stock symbols
 			Bundle argument = new Bundle();
 			argument.putString(Constants.KEY_STOCK_SYMBOL,symbolList.get(position));
 			GraphFragment fragment = new GraphFragment();
