@@ -2,8 +2,12 @@ package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.ContentProviderOperation;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -51,10 +55,7 @@ public class Utils {
                      * it will return null
                      */
                     ContentProviderOperation operation = buildBatchOperation(jsonObject);
-                    if (operation!=null)
-                        batchOperations.add(operation);
-                    else
-                        Log.e(LOG_TAG,"Stock doesn't exists");
+                    batchOperations.add(operation);
                 } else{
                     resultsArray = jsonObject.getJSONObject(RESULTS).getJSONArray(QUOTE);
 
@@ -67,7 +68,8 @@ public class Utils {
                 }
             }
         } catch (JSONException e){
-            Log.e(LOG_TAG, "String to JSON failed: " + e);
+//            Log.e(LOG_TAG, "String to JSON failed: " + e);
+            e.printStackTrace();
         }
         return batchOperations;
     }
@@ -100,9 +102,6 @@ public class Utils {
         try {
 
 		String change = jsonObject.getString(CHANGE);
-		if (change.equals("null"))
-			return null;
-
             builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString(SYMBOL));
             builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString(BID)));
             builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
