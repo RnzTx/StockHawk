@@ -1,5 +1,7 @@
 package com.sam_chordas.android.stockhawk.rest;
 
+import android.os.Build;
+
 import com.sam_chordas.android.stockhawk.BuildConfig;
 
 import java.text.SimpleDateFormat;
@@ -22,5 +24,5 @@ public class Constants {
 	public static final String ACTION_STOCK_UPDATE = "com.example.sam_chordas.stockhawk.STOCK_DATA_UPDATE";
 	public static final String DATE_FORMAT_TEMPLATE = "yyyy-MM-dd";
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(Constants.DATE_FORMAT_TEMPLATE, Locale.ENGLISH);
-
+	public static final int SDK_VERSION = Build.VERSION.SDK_INT;
 }

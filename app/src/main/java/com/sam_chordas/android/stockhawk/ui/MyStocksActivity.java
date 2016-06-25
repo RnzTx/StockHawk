@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -61,6 +63,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Cursor mCursor;
     boolean isConnected;
     private RealmController mRealmController;
+    private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         mRealmController = RealmController.with(this);
         ConnectivityManager cm =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-
+        getSupportActionBar().setElevation(0);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -87,7 +90,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 networkToast();
             }
         }
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
@@ -106,6 +109,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
+
+        if (Constants.SDK_VERSION>=21)
+            fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_accent)));
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (isConnected){
@@ -116,9 +123,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                 @Override public void onInput(MaterialDialog dialog, CharSequence input) {
                                     // On FAB click, receive user input. Make sure the stock doesn't already exist
                                     // in the DB and proceed accordingly
-//                                    Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
-//                                            new String[] { QuoteColumns.SYMBOL }, QuoteColumns.SYMBOL + "= ?",
-//                                            new String[] { input.toString() }, null);
                                     if (mRealmController.hasStockData(input.toString().trim().toUpperCase())) {
                                         Toast toast =
                                                 Toast.makeText(MyStocksActivity.this, getResources().getString(R.string.stock_exist),
@@ -225,6 +229,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     public void onLoadFinished(Loader<Cursor> loader, Cursor data){
         mCursorAdapter.swapCursor(data);
         mCursor = data;
+        recyclerView.scrollToPosition(mCursorAdapter.getItemCount()-1);
     }
 
     @Override

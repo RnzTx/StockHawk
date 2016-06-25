@@ -27,13 +27,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/txt_size_stock_price"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal"
+                android:textColor="@color/color_primary"
+                />
             <TextView
                 android:id="@+id/tv_bid_price_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/tv_stock_history"/>
+                android:text="@string/tv_stock_history"
+                android:textColor="@color/color_primary"
+                />
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/stock_line_chart"
                 android:layout_width="match_parent"
@@ -45,34 +49,38 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabbar_time_span"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:tabSelectedTextColor="@android:color/black"
+                app:tabIndicatorColor="@android:color/black"
+                app:tabTextColor="@color/color_primary"
+                >
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_1_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_button_1_month"
-                    android:contentDescription="@string/desc_radio_button_1_month"
+                    android:text="@string/tab_1_month"
+                    android:contentDescription="@string/desc_tab_1_month"
                     />
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_3_months"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_button_3_months"
-                    android:contentDescription="@string/desc_radio_button_3_months"
+                    android:text="@string/tab_3_months"
+                    android:contentDescription="@string/desc_tab_3_months"
                     />
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_6_months"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_button_6_months"
-                    android:contentDescription="@string/desc_radio_button_6_months"
+                    android:text="@string/tab_6_months"
+                    android:contentDescription="@string/desc_tab_6_months"
                     />
                 <android.support.design.widget.TabItem
                     android:id="@+id/tab_1_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_button_1_year"
-                    android:contentDescription="@string/desc_radio_button_1_year"
+                    android:text="@string/tab_1_year"
+                    android:contentDescription="@string/desc_tab_1_year"
                     />
             </android.support.design.widget.TabLayout>
         </LinearLayout>

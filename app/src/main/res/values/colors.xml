@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="color_primary_dark">#1976D2</color>
-  <color name="color_primary">#2196F3</color>
-  <color name="material_red_700">#D50000</color>
-  <color name="material_green_700">#00C853</color>
+  <color name="color_primary_dark">#512DA8</color>
+  <color name="color_primary">#673AB7</color>
+  <color name="color_accent">#7C4DFF</color>
+
+  <color name="color_price_down">#f44336</color>
+  <color name="color_price_up">#66BB6A</color>
   <color name="sample">#2196F3</color>
 </resources>

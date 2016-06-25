@@ -58,7 +58,7 @@ public class GraphFragment extends Fragment {
 	TextView tv_stock_history;
 	TabLayout tab_time_span;
 	private CustomMarkerView markerView;
-	static final int GRAPH_COLOR = Color.rgb(33,150,243);
+	static final int GRAPH_COLOR = Color.rgb(69,39,160);
 	public GraphFragment() {
 		// Required empty public constructor
 	}

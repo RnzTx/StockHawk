@@ -1,17 +1,16 @@
-
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_horizontal_margin"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+      android:layout_marginBottom="@dimen/activity_vertical_margin"
       />
 
   <com.melnykov.fab.FloatingActionButton
@@ -21,8 +20,7 @@
       android:layout_gravity="bottom|end"
       android:layout_margin="16dp"
       android:src="@drawable/ic_add_white_24dp"
-      fab:fab_colorNormal="@color/material_blue_500"
-      fab:fab_colorPressed="@color/material_blue_600"
+      app:backgroundTint="@color/color_primary"
       fab:fab_colorRipple="@color/ripple"
       fab:fab_shadow="true"
       fab:fab_type="normal"
@@ -31,3 +29,5 @@
       fab:layout_anchorGravity="bottom | end"
       />
 </FrameLayout>
+    <!--fab:fab_colorNormal="@color/color_primary"-->
+    <!--fab:fab_colorPressed="@color/color_primary_dark"-->
