@@ -127,8 +127,6 @@ public class StockTaskService extends GcmTaskService{
             try{
                 // get current stock info
                 getResponse = fetchData(urlString);
-                // store stock history
-                storeStockHistoryData(stock_symbol);
 
                 result = GcmNetworkManager.RESULT_SUCCESS;
                 try {
@@ -145,6 +143,9 @@ public class StockTaskService extends GcmTaskService{
                     Intent broadcastIntent = new Intent(Constants.ACTION_STOCK_UPDATE)
                             .setPackage(mContext.getPackageName());
                     mContext.sendBroadcast(broadcastIntent);
+
+                    // store stock history
+                    storeStockHistoryData(stock_symbol);
 
                 }catch (RemoteException | OperationApplicationException e){
                     Log.e(LOG_TAG, "Error applying batch insert", e);

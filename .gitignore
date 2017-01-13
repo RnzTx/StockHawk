@@ -6,3 +6,5 @@
 /captures
 
 *.iml
+app/app-release.apk
+signin.jks
